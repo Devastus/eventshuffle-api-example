@@ -44,7 +44,7 @@ describe("EventController", () => {
 
     // Before test cases
     beforeAll(() => {
-        let config: any = {
+        const config: any = {
             dateFormatType: "isodate"
         };
         configureDateFormatType(config);
