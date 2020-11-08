@@ -18,12 +18,22 @@ spec:
         app: eventshuffle-api
     spec:
       containers:
-      - name: eventshuffle-api
-        image: gcr.io/PROJECT_ID/IMAGE:TAG
-        ports:
-        - containerPort: 8080
-        resources:
-          requests:
-            cpu: 100m
-          limits:
-            cpu: 100m
+        - name: event-service
+          image: gcr.io/PROJECT_ID/IMAGE:TAG
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 100m
+            limits:
+              cpu: 100m
+        - name: mariadb
+          image: mariadb:10.5
+          ports:
+            - containerPort: 3306
+          resources:
+            requests:
+              cpu: 100m
+            limits:
+              cpu: 100m
+
