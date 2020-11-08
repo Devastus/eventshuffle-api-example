@@ -6,11 +6,6 @@ import logger, { configureLogger} from "./util/logger";
 import { configureDateFormatType, DateFormatType } from "./util/dateFormat";
 import { getConnectionManager, ConnectionOptions } from "typeorm";
 
-import Event from "./entities/event";
-import EventDate from "./entities/eventdate";
-import Vote from "./entities/vote";
-import Participant from "./entities/participant";
-
 import getEventRouter from "./routes/eventroutes";
 
 export interface Configuration {
@@ -21,14 +16,14 @@ export interface Configuration {
     logConsole: boolean,
     logElasticSearch: boolean,
     logLevel: string
-};
+}
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export async function connectDatabase() {
-    let entityDir = process.env.NODE_ENV === "production" ?
+    const entityDir = process.env.NODE_ENV === "production" ?
         "dist/entities/**/*.js" :
         "src/entities/**/*.ts";
 
@@ -36,24 +31,23 @@ export async function connectDatabase() {
         name: "default",
         type: (process.env.DB_TYPE || "sqlite") as any,
         host: process.env.DB_HOST || "",
-        port: parseInt(process.env.DB_PORT) || 5432,
+        port: parseInt(process.env.DB_PORT, 10) || 5432,
         username: process.env.DB_USERNAME || "root",
         password: process.env.DB_PASSWORD || "root",
-        database: process.env.DB_DATABASE || ":memory:",
+        database: process.env.DB_DATABASE || "test",
         entities: [
             entityDir
-            // Event, EventDate, Vote, Participant
         ],
         synchronize: (process.env.DB_SYNCHRONIZE === "true") || true,
         logging: (process.env.DB_LOGGING === "true") || false
     };
 
-    let connManager = getConnectionManager();
+    const connManager = getConnectionManager();
     const reconnectionTries = process.env.DB_RECONNECTION_TRIES ?
-        parseInt(process.env.DB_RECONNECTION_TRIES) :
+        parseInt(process.env.DB_RECONNECTION_TRIES, 10) :
         10;
     const reconnectionInterval = process.env.DB_RECONNECTION_INTERVAL ?
-        parseInt(process.env.DB_RECONNECTION_INTERVAL) :
+        parseInt(process.env.DB_RECONNECTION_INTERVAL, 10) :
         1000;
 
     for (let tries = 0; tries <= reconnectionTries; tries++) {

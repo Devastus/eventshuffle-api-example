@@ -12,7 +12,7 @@ import jsonResponse from "../util/jsonResponse";
  */
 async function listEvents(ctx: Context) {
     logger.debug("listEvents", {query: ctx.query});
-    let result = await getRepository(Event)
+    const result = await getRepository(Event)
         .createQueryBuilder("event")
         .select(["event.id", "event.name"])
         .offset(ctx.query.offset || 0)
@@ -27,7 +27,7 @@ async function listEvents(ctx: Context) {
  */
 async function getEvent(ctx: Context) {
     logger.debug("getEvent", {params: ctx.params});
-    let result: any = await getRepository(Event)
+    const result: any = await getRepository(Event)
         .findOne(
             ctx.params.id,
             {
@@ -59,7 +59,7 @@ async function getEvent(ctx: Context) {
  */
 async function getEventResults(ctx: Context) {
     logger.debug("getEventResults", {params: ctx.params});
-    let result: any = await getRepository(Event)
+    const result: any = await getRepository(Event)
         .findOne(
             ctx.params.id,
             {
@@ -110,14 +110,14 @@ async function insertEvent(ctx: Context) {
         })
     };
 
-    let newEvent = new Event({
+    const newEvent = new Event({
         ...body,
         createdAt: Date.now(),
         modifiedAt: Date.now()
     });
     delete newEvent.id;
 
-    let result = await getRepository(Event)
+    const result = await getRepository(Event)
         .save(newEvent);
     logger.debug("New Event created", newEvent);
     jsonResponse(ctx, 200, { id: result.id });
@@ -128,16 +128,16 @@ async function insertEvent(ctx: Context) {
  */
 async function insertVote(ctx: Context) {
     logger.debug("insertVote", {params: ctx.params, body: ctx.request.body});
-    let event: any = await getRepository(Event)
+    const event: any = await getRepository(Event)
         .findOne(
             ctx.params.id,
             { relations: ["participants", "votes", "votes.date", "votes.people"] }
         );
     if (!event) return ctx.throw(400);
 
-    let body: any = ctx.request.body;
+    const body: any = ctx.request.body;
     if (!body.name || !body.votes || body.votes.length < 1) return ctx.throw(400);
-    let voteDates: bigint[] = body.votes.map((vote: string) => Date.parse(vote));
+    const voteDates: bigint[] = body.votes.map((vote: string) => Date.parse(vote));
 
     // Get a Participant by name, or create one if it doesn't exist
     let participant = event.participants.find((p: Participant) => p.name === body.name);
@@ -148,8 +148,8 @@ async function insertVote(ctx: Context) {
     }
 
     // Update or create new Votes for each voted date
-    let votesChanged: boolean = false;
-    for (let voteDate of voteDates) {
+    let votesChanged = false;
+    for (const voteDate of voteDates) {
         let vote = event.votes.find((v: Vote) => v.date.date === voteDate);
 
         // Create new Vote if one doesn't exist

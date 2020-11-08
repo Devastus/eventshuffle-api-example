@@ -23,7 +23,7 @@ export default {
     },
 
     async dumpTestData() {
-        for(let ev of events) {
+        for(const ev of events) {
             await getRepository(Event).save(ev);
         }
     }

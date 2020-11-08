@@ -3,24 +3,26 @@ const { compilerOptions } = require("./tsconfig");
 
 module.exports = {
     bail: 0,
-    preset: 'ts-jest',
+    runner: "jest-runner-tsc",
+    displayName: "tsc",
+    // preset: 'ts-jest',
     testEnvironment: 'node',
     rootDir: ".",
     verbose: true,
     moduleFileExtensions: ["js", "ts", "tsx"],
-    globals: {
-        'ts-jest': {
-            "target": "ES2017",
-            "module": "commonjs",
-            "lib": ["es2017"],
-            "outDir": "dist",
-            "noImplicitAny": true,
-            "importHelpers": true,
-            "experimentalDecorators": true,
-            "emitDecoratorMetadata": true,
-            "esModuleInterop": true
-        }
-    },
+    // globals: {
+    //     'ts-jest': {
+    //         "target": "ES2017",
+    //         "module": "commonjs",
+    //         "lib": ["es2017"],
+    //         "outDir": "dist",
+    //         "noImplicitAny": true,
+    //         "importHelpers": true,
+    //         "experimentalDecorators": true,
+    //         "emitDecoratorMetadata": true,
+    //         "esModuleInterop": true
+    //     }
+    // },
     // roots: ["<rootDir>/src"],
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
         prefix: "<rootDir>/"

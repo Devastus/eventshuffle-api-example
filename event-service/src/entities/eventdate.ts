@@ -12,6 +12,6 @@ export default class EventDate {
     }
 
     format() {
-        return formatDate(this.date);
+        return formatDate(Number(this.date));
     }
 }

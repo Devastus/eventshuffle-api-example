@@ -13,7 +13,7 @@ function consoleFormat(configuration: Configuration) {
 }
 
 export function configureLogger(configuration: Configuration) {
-    let transports = [];
+    const transports = [];
     if (configuration.logConsole) {
         transports.push(
             new winston.transports.Console({
@@ -26,9 +26,9 @@ export function configureLogger(configuration: Configuration) {
             })
         );
     }
-    if (configuration.logElasticSearch) {
+    // if (configuration.logElasticSearch) {
 
-    }
+    // }
 
     logger = winston.createLogger({
         level: configuration.logLevel,
@@ -51,7 +51,7 @@ export default {
         logger.error(log, metadata);
     },
     log(level: string, log: any, metadata?: any) {
-        let metadataObject: any = {};
+        const metadataObject: any = {};
         if (metadata) metadataObject.metadata = metadata;
         logger[level](log, metadataObject);
     },

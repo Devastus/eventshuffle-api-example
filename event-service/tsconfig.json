@@ -4,19 +4,19 @@
     "module": "commonjs",
     "lib": ["es2017"],
     "outDir": "dist",
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "importHelpers": true,
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@src/*": ["*"]
+      "@src/*": ["src/*"]
     }
   },
   "exclude": [
     "dist",
     "node_modules",
-    "__tests__"
+    "coverage"
   ]
 }

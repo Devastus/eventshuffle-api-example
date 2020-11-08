@@ -158,54 +158,54 @@ describe("Event Service", () => {
         done();
     });
 
-    // it(
-    //     "GET /:id should return a single event",
-    //     async () =>
-    // {
-    //     // TODO: Insert test data to db
-    //     const response = await request(app.callback())
-    //         .get(`/${testRequests.getEventResults.params.id}`)
-    //         .set('Accept', 'application/json')
-    //         .expect(200)
-    //         .expect('Content-Type', /json/);
-    //     expect(response.body).toEqual(expectedResponses.getEvent);
-    // });
+    it(
+        "GET /:id should return a single event",
+        async () =>
+    {
+        // TODO: Insert test data to db
+        const response = await request(app.callback())
+            .get(`/${testRequests.getEventResults.params.id}`)
+            .set('Accept', 'application/json')
+            .expect(200)
+            .expect('Content-Type', /json/);
+        expect(response.body).toEqual(expectedResponses.getEvent);
+    });
 
-    // it(
-    //     "GET /:id/results should return event metadata with suitable dates for all participants",
-    //     async () =>
-    // {
-    //     // TODO: Insert test data to db
-    //     const response = await request(app.callback())
-    //         .get(`/${testRequests.getEventResults.params.id}/results`)
-    //         .set('Accept', 'application/json')
-    //         .expect(200)
-    //         .expect('Content-Type', /json/);
-    //     expect(response.body).toEqual(expectedResponses.getEventResults);
-    // });
+    it(
+        "GET /:id/results should return event metadata with suitable dates for all participants",
+        async () =>
+    {
+        // TODO: Insert test data to db
+        const response = await request(app.callback())
+            .get(`/${testRequests.getEventResults.params.id}/results`)
+            .set('Accept', 'application/json')
+            .expect(200)
+            .expect('Content-Type', /json/);
+        expect(response.body).toEqual(expectedResponses.getEventResults);
+    });
 
-    // it(
-    //     "POST / should create new event and return it's id",
-    //     async () =>
-    // {
-    //     const response = await request(app.callback())
-    //         .post("/")
-    //         .set('Accept', 'application/json')
-    //         .expect(200)
-    //         .expect('Content-Type', /json/);
-    //     expect(response.body).toEqual(expectedResponses.insertEvent);
-    // });
+    it(
+        "POST / should create new event and return it's id",
+        async () =>
+    {
+        const response = await request(app.callback())
+            .post("/")
+            .set('Accept', 'application/json')
+            .expect(200)
+            .expect('Content-Type', /json/);
+        expect(response.body).toEqual(expectedResponses.insertEvent);
+    });
 
-    // it(
-    //     "POST /:id/vote should create new votes for an event and return new event status",
-    //     async () =>
-    // {
-    //     // TODO: Insert test data to db
-    //     const response = await request(app.callback())
-    //         .post(`/${testRequests.insertVote.params.id}/vote`)
-    //         .set('Accept', 'application/json')
-    //         .expect(200)
-    //         .expect('Content-Type', /json/);
-    //     expect(response.body).toEqual(expectedResponses.insertVote);
-    // });
+    it(
+        "POST /:id/vote should create new votes for an event and return new event status",
+        async () =>
+    {
+        // TODO: Insert test data to db
+        const response = await request(app.callback())
+            .post(`/${testRequests.insertVote.params.id}/vote`)
+            .set('Accept', 'application/json')
+            .expect(200)
+            .expect('Content-Type', /json/);
+        expect(response.body).toEqual(expectedResponses.insertVote);
+    });
 });
