@@ -1,0 +1,60 @@
+version: "3.3"
+
+services:
+
+  apigateway:
+    image: nginx:latest
+    networks:
+      - external
+      - internal
+
+  event-service:
+    build:
+      context: ./event-service
+    environment:
+      DB_TYPE: "mariadb"
+      DB_HOST: "mariadb"
+      DB_PORT: 3306
+      DB_USERNAME: "root"
+      DB_PASSWORD: "root"
+      DB_DATABASE: "test"
+      DB_RECONNECTION_TRIES: 10
+      DB_RECONNECTION_INTERVAL: 5000
+      DB_SYNCHRONIZE: "true"
+    ports:
+      - 8080:8080
+    networks:
+      - internal
+
+  mariadb:
+    image: mariadb:10.5
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "test"
+    ports:
+      - 3306:3306
+    networks:
+      - internal
+
+  adminer:
+    image: adminer
+    ports:
+      - 8090:8080
+    networks:
+      - internal
+
+  # elasticsearch:
+  #   image: elasticsearch:7.9.3
+  #   environment:
+  #     discovery.type: "single-node"
+  #   ports:
+  #     - 9200:9200
+  #     - 9300:9300
+  #   networks:
+  #     - internal
+
+networks:
+  internal:
+    external: false
+  external:
+    external: true

@@ -1,0 +1,37 @@
+# Global
+http://localhost:8080
+--
+
+--
+# Get a list of events
+GET /list
+
+--
+GET /1
+# Get event with id
+
+--
+# Get suitable date for event with id
+GET /1/results
+
+--
+# Post a new event
+POST /
+{
+    "name": "Sockpuppet gladiator fighting",
+    "dates": [
+        "2014-01-01",
+        "2014-01-05",
+        "2014-01-12"
+    ]
+}
+
+--
+# Post a vote of dates for an event
+POST /1/vote
+{
+    "name": "Sockus Maximus",
+    "votes": [
+        "2014-01-01"
+    ]
+}
