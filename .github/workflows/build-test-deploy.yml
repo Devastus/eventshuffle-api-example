@@ -28,7 +28,9 @@ jobs:
     - run: cd event-service
     
     - name: Install
-      run: npm ci
+      run: |- 
+        cd event-service
+        npm ci
      
     # Run linting to make sure project coding style is kept
     - name: Run linter
