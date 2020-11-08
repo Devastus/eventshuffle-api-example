@@ -19,27 +19,27 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      
+    
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
     
-    - run: cd event-service
-    
     - name: Install
-      run: |- 
-        cd event-service
-        npm ci
+      working-directory: event-service
+      run: npm ci
      
     # Run linting to make sure project coding style is kept
     - name: Run linter
+      working-directory: event-service
       run: npm run lint
     
     # Build the project
     - name: Build
+      working-directory: event-service
       run: npm run build --if-present
       
     # Run tests
     - name: Run unit tests
+      working-directory: event-service
       run: npm run test:unit
