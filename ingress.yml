@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: eventshuffle-api-ingress
   # annotations:
+  #   ingress.kubernetes.io/ssl-redirect: "false"
   #   nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
@@ -12,4 +13,4 @@ spec:
             # pathType: Prefix
             backend:
               serviceName: eventshuffle-api-service
-              servicePort: 80
+              servicePort: 8080

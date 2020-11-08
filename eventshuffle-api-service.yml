@@ -3,9 +3,9 @@ kind: Service
 metadata:
   name: eventshuffle-api-service
 spec:
-  type: LoadBalancer
-  ports:
-    - port: 80
-      targetPort: 8080
+  type: ClusterIP
   selector:
     app: eventshuffle-api
+  ports:
+    - port: 8080
+      targetPort: 8080
