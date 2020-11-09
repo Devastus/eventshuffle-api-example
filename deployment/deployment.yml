@@ -18,32 +18,32 @@ spec:
         app: "eventshuffle-api"
     spec:
       containers:
-        - name: "event-service"
-          image: "gcr.io/PROJECT_ID/IMAGE:TAG"
-          envFrom:
-            - configMapRef:
-              name: "event-service-configmap"
-            - secretRef:
-              name: "event-service-secrets"
-          ports:
-            - containerPort: 8080
-          resources:
-            requests:
-              cpu: "100m"
-            limits:
-              cpu: "100m"
-        - name: "mariadb"
-          image: "mariadb:10.5"
-          envFrom:
-            - configMapRef:
-              name: "mariadb-configmap"
-            - secretRef:
-              name: "mariadb-secrets"
-          ports:
-            - containerPort: 3306
-          resources:
-            requests:
-              cpu: "100m"
-            limits:
-              cpu: "100m"
+      - name: "event-service"
+        image: "gcr.io/PROJECT_ID/IMAGE:TAG"
+        envFrom:
+        - configMapRef:
+          name: event-service-configmap
+        - secretRef:
+          name: event-service-secrets
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "100m"
+          limits:
+            cpu: "100m"
+      - name: "mariadb"
+        image: "mariadb:10.5"
+        envFrom:
+        - configMapRef:
+          name: mariadb-configmap
+        - secretRef:
+          name: mariadb-secrets
+        ports:
+        - containerPort: 3306
+        resources:
+          requests:
+            cpu: "100m"
+          limits:
+            cpu: "100m"
 
