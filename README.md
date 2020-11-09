@@ -21,7 +21,7 @@ Visit `http://localhost:8080` to access the API.
 
 ### Docker
 
-First make sure you have Docker and Docker Compose installed. 
+First make sure you have Docker and Docker Compose installed.
 
 Navigate to the project root and use these commands to run the whole stack in Docker Compose - we need to create the external network first.
 ```sh
@@ -43,7 +43,10 @@ docker-compose down
 
 ### GKE (Google Kubernetes Engine)
 
+A Github Action is run for every master push that builds, tests and deploys the application into GKE, if everything went succesfully.
+See `.github/workflows` and `deployment/` folders for specifics respectively.
 
+Currently, you can visit `http://34.98.85.28/api/v1/event` to access the API at Google Kubernetes Cluster.
 
 ## Technologies
 

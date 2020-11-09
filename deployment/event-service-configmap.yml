@@ -1,0 +1,14 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: event-service-configmap
+data:
+  DB_TYPE: mariadb
+  DB_HOST: mariadb
+  DB_PORT: 3306
+  DB_USERNAME: root
+  DB_DATABASE: eventshuffle
+  DB_RECONNECTION_TRIES: 100
+  DB_RECONNECTION_INTERVAL: 3000
+  DB_SYNCHRONIZE: true
