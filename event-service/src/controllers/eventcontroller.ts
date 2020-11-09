@@ -7,6 +7,32 @@ import EventDate from "../entities/eventdate";
 import Participant from "../entities/participant";
 import jsonResponse from "../util/jsonResponse";
 
+function formatEvent(eventData: any): any {
+    if (!eventData) return undefined;
+    let result = {
+        id: eventData.id,
+        name: eventData.name,
+        dates: eventData.dates,
+        votes: eventData.votes
+    };
+
+    if (result.dates.length > 0) {
+        result.dates = result.dates.map((eventDate: EventDate) => eventDate.format());
+    }
+
+    if (result.votes.length > 0) {
+        result.votes = result.votes.map((vote: Vote) => {
+            return {
+                // ...vote,
+                date: vote.date.format(),
+                people: vote.people.map((p: any) => p.name)
+            };
+        });
+    }
+
+    return result;
+}
+
 /**
  * List all events
  */
@@ -27,7 +53,7 @@ async function listEvents(ctx: Context) {
  */
 async function getEvent(ctx: Context) {
     logger.debug("getEvent", {params: ctx.params});
-    const result: any = await getRepository(Event)
+    let result: any = await getRepository(Event)
         .findOne(
             ctx.params.id,
             {
@@ -37,20 +63,7 @@ async function getEvent(ctx: Context) {
         );
     if (!result) return ctx.throw(404);
 
-    // Format relations
-    if (result.dates.length > 0) {
-        result.dates = result.dates.map((eventDate: EventDate) => eventDate.format());
-    }
-    if (result.votes.length > 0) {
-        result.votes = result.votes.map((vote: Vote) => {
-            return {
-                // ...vote,
-                date: vote.date.format(),
-                people: vote.people.map((p: any) => p.name)
-            };
-        });
-    }
-
+    result = formatEvent(result);
     jsonResponse(ctx, 200, result);
 }
 
@@ -101,17 +114,13 @@ async function insertEvent(ctx: Context) {
         return ctx.throw(400);
     }
 
-    const body = {
+    const newEvent = new Event({
         ...ctx.request.body,
         dates: ctx.request.body.dates.map((item: any) => {
             return new EventDate({
                 date: Date.parse(item)
             });
-        })
-    };
-
-    const newEvent = new Event({
-        ...body,
+        }),
         createdAt: Date.now(),
         modifiedAt: Date.now()
     });
@@ -131,7 +140,7 @@ async function insertVote(ctx: Context) {
     const event: any = await getRepository(Event)
         .findOne(
             ctx.params.id,
-            { relations: ["participants", "votes", "votes.date", "votes.people"] }
+            { relations: ["participants", "dates", "votes", "votes.date", "votes.people"] }
         );
     if (!event) return ctx.throw(400);
 
@@ -144,15 +153,22 @@ async function insertVote(ctx: Context) {
     if (!participant){
         participant = new Participant({name: body.name});
         event.participants.push(participant);
-        logger.debug("New Participant added to event", participant);
+        logger.debug(`New Participant '${participant.name}' voting on event '${event.id}'`);
     }
 
     // Update or create new Votes for each voted date
     let votesChanged = false;
-    for (const voteDate of voteDates) {
-        let vote = event.votes.find((v: Vote) => v.date.date === voteDate);
+    for (let i = 0; i < voteDates.length; i++) {
+        let voteDate = voteDates[i];
+
+        // Check if given date exists in Event
+        if (!event.dates.find((d: EventDate) => d.date === voteDate)) {
+            logger.warn(`Participant '${participant.name}' voted on an invalid date '${body.votes[i]}', discarding...`);
+            continue;
+        }
 
         // Create new Vote if one doesn't exist
+        let vote = event.votes.find((v: Vote) => v.date.date === voteDate);
         if (!vote) {
             vote = new Vote({
                 event: new Event({id: parseInt(ctx.params.id, 10)}),
@@ -163,7 +179,7 @@ async function insertVote(ctx: Context) {
             });
             event.votes.push(vote);
             votesChanged = true;
-            logger.debug("New Vote created", vote);
+            logger.debug(`New Vote created for event '${event.id}'`, vote);
         }
         // Modify Vote if participant isn't already included,
         else {
@@ -171,7 +187,7 @@ async function insertVote(ctx: Context) {
                 vote.people.push(participant);
                 vote.modifiedAt = Date.now();
                 votesChanged = true;
-                logger.debug("Existing Vote modified", vote);
+                logger.debug(`Existing Vote '${vote.id}' modified for event '${event.id}'`, vote);
             }
         }
     }
@@ -180,10 +196,12 @@ async function insertVote(ctx: Context) {
         event.modifiedAt = Date.now();
         await getRepository(Event)
             .save(event);
-        logger.debug("Event changes saved", {id: ctx.params.id});
+        logger.debug(`Event '${event.id}' changes saved`);
     }
 
-    await getEvent(ctx);
+    // Return formatted version of changed event
+    let result = formatEvent(event);
+    jsonResponse(ctx, 200, result);
 }
 
 export default {

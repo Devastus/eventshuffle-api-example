@@ -86,7 +86,7 @@ export default async function(app: Koa): Promise<Configuration> {
         appName: process.env.APP_NAME || "event-service",
         port: parseInt(process.env.PORT) || 8080,
         dateFormatType: (process.env.DATE_FORMAT || "isodate") as any,
-        eventControllerRoute: process.env.EVENT_CONTROLLER_ROUTE || "",
+        eventControllerRoute: process.env.EVENT_CONTROLLER_ROUTE || "/api/v1/event",
         logConsole: (process.env.LOG_CONSOLE === "true") || true,
         logElasticSearch: (process.env.LOG_ELASTIC_SEARCH === "true") || false ,
         logLevel: process.env.LOG_LEVEL || "debug",
