@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: event-service-service
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: eventshuffle-api
   ports:
