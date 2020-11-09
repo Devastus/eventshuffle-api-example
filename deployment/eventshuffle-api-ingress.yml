@@ -1,0 +1,30 @@
+apiVersion: "extensions/v1beta1"
+kind: "Ingress"
+metadata:
+  name: "eventshuffle-api-ingress"
+  namespace: "default"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: "/api/v1/event/*"
+        backend:
+          serviceName: "event-service-service"
+          servicePort: 80
+
+# apiVersion: networking.k8s.io/v1beta1
+# kind: Ingress
+# metadata:
+#   name: eventshuffle-api-ingress
+#   annotations:
+#     ingress.kubernetes.io/ssl-redirect: "false"
+#   #   nginx.ingress.kubernetes.io/rewrite-target: /
+# spec:
+#   rules:
+#     - http:
+#         paths:
+#           - path: /api/v1/event
+#             # pathType: Prefix
+#             backend:
+#               serviceName: event-service-service
+#               servicePort: 80
