@@ -10,8 +10,10 @@ env:
 on:
   push:
     branches: [ master ]
+    paths: [ "event-service/**" ]
   pull_request:
     branches: [ master ]
+    paths: [ "event-service/**" ]
 
 jobs:
   event-service-build-test-publish-gcr:
