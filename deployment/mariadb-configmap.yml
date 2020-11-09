@@ -1,6 +1,6 @@
-apiVersion: "v1"
-kind: "ConfigMap"
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: "mariadb-configmap"
+  name: mariadb-configmap
 data:
   MYSQL_DATABASE: "eventshuffle"

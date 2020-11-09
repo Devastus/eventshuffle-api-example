@@ -1,8 +1,8 @@
 
-apiVersion: "v1"
-kind: "ConfigMap"
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: "event-service-configmap"
+  name: event-service-configmap
 data:
   DB_TYPE: "mariadb"
   DB_HOST: "mariadb-service"

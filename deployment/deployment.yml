@@ -1,12 +1,12 @@
-apiVersion: "apps/v1"
-kind: "Deployment"
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: "eventshuffle-api"
+  name: eventshuffle-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: "eventshuffle-api"
+      app: eventshuffle-api
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -15,11 +15,11 @@ spec:
   template:
     metadata:
       labels:
-        app: "eventshuffle-api"
+        app: eventshuffle-api
     spec:
       containers:
-      - name: "event-service"
-        image: "gcr.io/PROJECT_ID/IMAGE:TAG"
+      - name: event-service
+        image: gcr.io/PROJECT_ID/IMAGE:TAG
         envFrom:
         - configMapRef:
           name: event-service-configmap
@@ -29,11 +29,11 @@ spec:
         - containerPort: 8080
         resources:
           requests:
-            cpu: "100m"
+            cpu: 100m
           limits:
-            cpu: "100m"
-      - name: "mariadb"
-        image: "mariadb:10.5"
+            cpu: 100m
+      - name: mariadb
+        image: mariadb:10.5
         envFrom:
         - configMapRef:
           name: mariadb-configmap
@@ -43,7 +43,7 @@ spec:
         - containerPort: 3306
         resources:
           requests:
-            cpu: "100m"
+            cpu: 100m
           limits:
-            cpu: "100m"
+            cpu: 100m
 
