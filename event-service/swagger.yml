@@ -1,0 +1,230 @@
+swagger: "2.0"
+info:
+  title: "Eventshuffle API"
+  description: >
+    This is an example microservice API implementation
+  version: "1.0.0"
+schemes:
+  - "http"
+
+definitions:
+  EventList:
+    type: "array"
+    items:
+      $ref: "#/definitions/EventListItem"
+  EventListItem:
+    type: "object"
+    properties:
+      id:
+        type: "number"
+      name:
+        type: "string"
+  Event:
+    type: "object"
+    properties:
+      id:
+        type: "number"
+      name:
+        type: "string"
+      dates:
+        type: "array"
+        items:
+          type: "string"
+      votes:
+        type: "array"
+        items:
+          $ref: "#/definitions/Vote"
+  EventResults:
+    type: "object"
+    properties:
+      id:
+        type: "number"
+      name:
+        type: "string"
+      suitableDates:
+        type: "array"
+        items:
+          $ref: "#/definitions/Vote"
+  Vote:
+    type: "object"
+    properties:
+      date:
+        type: "string"
+      people:
+        type: "array"
+        items:
+          type: "string"
+  Health:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        enum:
+          - "UP"
+          - "DOWN"
+
+responses:
+  400:
+    description: "Bad request"
+  404:
+    description: "Not found"
+  500:
+    description: "Internal Server Error"
+
+paths:
+  /api/v1/event/health:
+    get:
+      summary: "Check the status of the service"
+      description: "If the service is up and running correctly the response will be \"UP\""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Service is up and healthy"
+          schema:
+            $ref: "#/definitions/Health"
+        500:
+          $ref: "#/responses/500"
+  /api/v1/event/list:
+    get:
+      summary: "List all events"
+      description: "List all registered event IDs and names in Eventshuffle"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "List of events"
+          schema:
+            $ref: "#/definitions/EventList"
+        500:
+          $ref: "#/responses/500"
+  /api/v1/event:
+    post:
+      summary: "Submit a new event"
+      description: "Submit a new event with dates to vote on"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "event"
+          description: "New event"
+          schema:
+            type: "object"
+            required:
+              - "name"
+              - "dates"
+            properties:
+              name:
+                type: "string"
+              dates:
+                type: "array"
+                items:
+                  type: "string"
+      responses:
+        200:
+          description: "Event id"
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: "number"
+        400:
+          $ref: "#/responses/400"
+        500:
+          $ref: "#/responses/500"
+  /api/v1/event/{id}:
+    get:
+      summary: "Get event"
+      description: "Get a specific event by its ID"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of event"
+          schema:
+            type: "integer"
+            minimum: 1
+          required: true
+      responses:
+        200:
+          description: "Event data"
+          schema:
+            $ref: "#/definitions/Event"
+        404:
+          $ref: "#/responses/404"
+        500:
+          $ref: "#/responses/500"
+  /api/v1/event/{id}/results:
+    get:
+      summary: "Get event results"
+      description: "Get suitable dates of an event for all its participants"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of event"
+          schema:
+            type: "integer"
+            minimum: 1
+          required: true
+      responses:
+        200:
+          description: "Suitable dates for event"
+          schema:
+            $ref: "#/definitions/EventResults"
+        404:
+          $ref: "#/responses/404"
+        500:
+          $ref: "#/responses/500"
+  /api/v1/event/{id}/vote:
+    post:
+      summary: "Vote on an event"
+      description: "Vote on event dates"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of event"
+          schema:
+            type: "integer"
+            minimum: 1
+          required: true
+        - in: "body"
+          name: "vote"
+          description: "Votes for an event"
+          schema:
+            type: "object"
+            required:
+              - "name"
+              - "votes"
+            properties:
+              name:
+                type: "string"
+              votes:
+                type: "array"
+                items:
+                  type: "string"
+      responses:
+        200:
+          description: "Event data"
+          schema:
+            $ref: "#/definitions/Event"
+        400:
+          $ref: "#/responses/400"
+        500:
+          $ref: "#/responses/500"

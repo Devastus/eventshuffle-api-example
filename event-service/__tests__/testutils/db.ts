@@ -1,10 +1,10 @@
 import { getRepository, getConnection } from "typeorm";
-import { connectDatabase } from "../../src/config";
+import { connectDatabase } from "@src/config";
 import { events } from "./data";
-import Event from "../../src/entities/event";
-import EventDate from "../../src/entities/eventdate";
-import Vote from "../../src/entities/vote";
-import Participant from "../../src/entities/participant";
+import Event from "@src/entities/event";
+import EventDate from "@src/entities/eventDate";
+import Vote from "@src/entities/vote";
+import Participant from "@src/entities/participant";
 
 export default {
     async createConnection() {

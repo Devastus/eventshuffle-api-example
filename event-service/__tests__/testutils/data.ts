@@ -1,7 +1,7 @@
-import Event from "../../src/entities/event";
-import EventDate from "../../src/entities/eventdate";
-import Vote from "../../src/entities/vote";
-import Participant from "../../src/entities/participant";
+import Event from "@src/entities/event";
+import EventDate from "@src/entities/eventDate";
+import Vote from "@src/entities/vote";
+import Participant from "@src/entities/participant";
 
 export const dates: EventDate[] = [
     new EventDate({

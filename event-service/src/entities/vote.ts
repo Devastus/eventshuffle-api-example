@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable } from "typeorm";
 import Event from "./event";
-import EventDate from "./eventdate";
+import EventDate from "./eventDate";
 import Participant from "./participant";
 
 @Entity("vote")

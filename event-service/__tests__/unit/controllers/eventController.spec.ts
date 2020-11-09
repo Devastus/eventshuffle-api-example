@@ -1,11 +1,10 @@
-import { Context } from "koa";
-import EventController from "@src/controllers/eventcontroller";
+import EventController from "@src/controllers/eventController";
 import { mockContext, mockTypeORM } from "../../testutils/mock";
 import { configureDateFormatType } from "@src/util/dateFormat";
 jest.mock("@src/util/logger");
 
 import Event from "@src/entities/event";
-import EventDate from "@src/entities/eventdate";
+import EventDate from "@src/entities/eventDate";
 import Vote from "@src/entities/vote";
 import Participant from "@src/entities/participant";
 

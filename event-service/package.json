@@ -42,9 +42,10 @@
     "koa-send": "^5.0.1",
     "moment": "^2.29.1",
     "mysql": "^2.18.1",
-    "sqlite3": "^5.0.0",
-    "tslib": "^2.0.3",
     "reflect-metadata": "^0.1.13",
+    "sqlite3": "^5.0.0",
+    "swagger2-koa": "^2.0.0",
+    "tslib": "^2.0.3",
     "typeorm": "^0.2.29",
     "winston": "^3.3.3"
   },

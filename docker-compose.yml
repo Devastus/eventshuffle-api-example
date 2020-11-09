@@ -26,7 +26,7 @@ services:
       DB_RECONNECTION_TRIES: 10
       DB_RECONNECTION_INTERVAL: 5000
       DB_SYNCHRONIZE: "true"
-      EVENT_CONTROLLER_ROUTE: "/api/v1/event"
+      ROUTE_PREFIX: "/api/v1/event"
     expose:
       - "9000"
     ports:

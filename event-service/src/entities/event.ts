@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, JoinTable, JoinColumn } from "typeorm";
-import EventDate from "./eventdate";
+import EventDate from "./eventDate";
 import Participant from "./participant";
 import Vote from "./vote";
 

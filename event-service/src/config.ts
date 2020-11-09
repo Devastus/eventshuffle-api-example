@@ -2,17 +2,20 @@ import dotenv from "dotenv";
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import errorMiddleware from "./util/errorMiddleware";
+import * as swagger from "swagger2";
+import { ui as swaggerUi } from "swagger2-koa";
 import logger, { configureLogger} from "./util/logger";
 import { configureDateFormatType, DateFormatType } from "./util/dateFormat";
 import { getConnectionManager, ConnectionOptions } from "typeorm";
 
-import getEventRouter from "./routes/eventroutes";
+import getEventRouter from "./routes/eventRoutes";
+import getMetricsRouter from "./routes/metricsRoutes";
 
 export interface Configuration {
     appName: string,
     port: number,
     dateFormatType: DateFormatType,
-    eventControllerRoute: string,
+    routePrefix: string,
     logConsole: boolean,
     logElasticSearch: boolean,
     logLevel: string
@@ -86,7 +89,7 @@ export default async function(app: Koa): Promise<Configuration> {
         appName: process.env.APP_NAME || "event-service",
         port: parseInt(process.env.PORT) || 8080,
         dateFormatType: (process.env.DATE_FORMAT || "isodate") as any,
-        eventControllerRoute: process.env.EVENT_CONTROLLER_ROUTE || "/api/v1/event",
+        routePrefix: process.env.ROUTE_PREFIX || "/api/v1/event",
         logConsole: (process.env.LOG_CONSOLE === "true") || true,
         logElasticSearch: (process.env.LOG_ELASTIC_SEARCH === "true") || false ,
         logLevel: process.env.LOG_LEVEL || "debug",
@@ -101,11 +104,15 @@ export default async function(app: Koa): Promise<Configuration> {
     // Middlewares
     app.use(bodyParser());
     app.use(errorMiddleware);
-    app.on('error', (err, ctx) => {
+    app.on('error', (err) => {
         logger.warn(err);
     });
 
+    const swaggerDocument: any = swagger.loadDocumentSync("./swagger.yml");
+
     // Routes
+    app.use(swaggerUi(swaggerDocument, `${configuration.routePrefix}/swagger`));
+    app.use(getMetricsRouter(configuration).routes());
     app.use(getEventRouter(configuration).routes());
 
     return configuration;
