@@ -16,7 +16,7 @@ on:
     paths: [ "event-service/**" ]
 
 jobs:
-  event-service-build-test-publish-gcr:
+  event-service-build-publish:
     runs-on: ubuntu-latest
 
     strategy:

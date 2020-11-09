@@ -30,7 +30,7 @@ docker network create external
 ```sh
 docker-compose up -d
 ```
-This will build the event-service image and spin it up alongside a MySQL container, Nginx reverse proxy and Elastic Search.
+This will build the event-service image and spin it up alongside a MariaDB container, Nginx reverse proxy and Elastic Search.
 
 Visit `http://localhost:8080` to access the API.
 
@@ -43,16 +43,22 @@ docker-compose down
 
 ### GKE (Google Kubernetes Engine)
 
-A Github Action is run for every master push that builds, tests and deploys the application into GKE, if everything went succesfully.
+A Github Action is run for every master push that builds, tests and publishes a
+Docker image into Google Container Registry. Another Github Action deploys a single
+Kubernetes deployment (for the sake of simplicity) of the application into GKE.
 See `.github/workflows` and `deployment/` folders for specifics respectively.
 
-Currently, you can visit `http://35.228.127.159/api/v1/event` to access the API at Google Kubernetes Cluster.
+Currently, you can visit `http://eventshuffle.mullikka.ml/api/v1/event` to access the API
+running at Google Kubernetes cluster.
 
 ## Technologies
 
 - Koa.js - Node.js backend framework
-- TypeORM with SQLite / MySQL
+- TypeORM
 - Typescript
+- MariaDB
+- SQLite
+- Nginx
 - Docker
 - Kubernetes
 - Github Actions
