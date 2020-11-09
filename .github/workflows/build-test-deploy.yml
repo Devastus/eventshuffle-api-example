@@ -86,8 +86,8 @@ jobs:
     - name: Deploy to GKE
       working-directory: deployment
       run: |-
-        kubectl create secret generic mariadb-secrets --from-literal=MYSQL_ROOT_PASSWORD={{ secrets.DB_PASSWORD }}
-        kubectl create secret generic event-service--secrets --from-literal=DB_PASSWORD={{ secrets.DB_PASSWORD }}
+        kubectl create secret generic mariadb-secrets --from-literal=MYSQL_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }}
+        kubectl create secret generic event-service-secrets --from-literal=DB_PASSWORD=${{ secrets.DB_PASSWORD }}
         #kubectl create configmap nginx-configmap --from-file nginx.conf
         ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
         ./kustomize build . | kubectl apply -f -

@@ -46,7 +46,7 @@ docker-compose down
 A Github Action is run for every master push that builds, tests and deploys the application into GKE, if everything went succesfully.
 See `.github/workflows` and `deployment/` folders for specifics respectively.
 
-Currently, you can visit `http://34.98.85.28/api/v1/event` to access the API at Google Kubernetes Cluster.
+Currently, you can visit `http://35.228.127.159/api/v1/event` to access the API at Google Kubernetes Cluster.
 
 ## Technologies
 
