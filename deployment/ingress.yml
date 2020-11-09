@@ -2,8 +2,8 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: eventshuffle-api-ingress
-  # annotations:
-  #   ingress.kubernetes.io/ssl-redirect: "false"
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
   #   nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
@@ -12,5 +12,5 @@ spec:
           - path: /api/v1/event
             # pathType: Prefix
             backend:
-              serviceName: eventshuffle-api-service
-              servicePort: 8080
+              serviceName: event-service-service
+              servicePort: 80
