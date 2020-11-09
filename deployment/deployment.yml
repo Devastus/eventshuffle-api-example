@@ -22,9 +22,9 @@ spec:
         image: gcr.io/PROJECT_ID/IMAGE:TAG
         envFrom:
         - configMapRef:
-          name: event-service-configmap
+            name: event-service-configmap
         - secretRef:
-          name: event-service-secrets
+            name: event-service-secrets
         ports:
         - containerPort: 8080
         resources:
@@ -36,9 +36,9 @@ spec:
         image: mariadb:10.5
         envFrom:
         - configMapRef:
-          name: mariadb-configmap
+            name: mariadb-configmap
         - secretRef:
-          name: mariadb-secrets
+            name: mariadb-secrets
         ports:
         - containerPort: 3306
         resources:
