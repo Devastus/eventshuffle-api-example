@@ -5,7 +5,7 @@ metadata:
   name: event-service-configmap
 data:
   DB_TYPE: "mariadb"
-  DB_HOST: "mariadb"
+  DB_HOST: "mariadb-service"
   DB_PORT: "3306"
   DB_USERNAME: "root"
   DB_DATABASE: "eventshuffle"
