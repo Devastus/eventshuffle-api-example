@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: mariadb-configmap
 data:
-  MYSQL_DATABASE: eventshuffle
+  MYSQL_DATABASE: "eventshuffle"
