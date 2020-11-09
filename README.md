@@ -37,7 +37,7 @@ docker network create external
 ```sh
 docker-compose up -d
 ```
-This will build the event-service image and spin it up alongside a MariaDB container, Nginx reverse proxy and Elastic Search.
+This will build the event-service image and spin it up alongside MariaDB container behind an Nginx reverse proxy.
 
 Visit [http://localhost:8080/api/v1/event](http://localhost:8080/api/v1/event) to access the API,
 or [http://localhost:8080/api/v1/event/swagger](http://localhost:8080/api/v1/event/swagger)
