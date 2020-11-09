@@ -7,7 +7,6 @@ COPY ./*.yml build/
 
 WORKDIR build/
 RUN npm ci && npm run build
-# RUN npm ci
 
 # # Run stage
 FROM node:12-alpine

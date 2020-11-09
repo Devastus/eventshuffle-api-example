@@ -17,7 +17,9 @@ npm run dev
 ```
 It will spin up the server with SQLite in-memory database for easy testing.
 
-Visit [http://localhost:8080/api/v1/event](http://localhost:8080/api/v1/event) to access the API.
+Visit [http://localhost:8080/api/v1/event](http://localhost:8080/api/v1/event) to access the API,
+or [http://localhost:8080/api/v1/event/swagger](http://localhost:8080/api/v1/event/swagger)
+to test it through Swagger.
 
 ### Docker
 
@@ -32,7 +34,9 @@ docker-compose up -d
 ```
 This will build the event-service image and spin it up alongside a MariaDB container, Nginx reverse proxy and Elastic Search.
 
-Visit [http://localhost:8080/api/v1/event](http://localhost:8080/api/v1/event) to access the API.
+Visit [http://localhost:8080/api/v1/event](http://localhost:8080/api/v1/event) to access the API,
+or [http://localhost:8080/api/v1/event/swagger](http://localhost:8080/api/v1/event/swagger)
+to test it through Swagger.
 
 Run this command at project root to take down the containers:
 ```sh
@@ -48,8 +52,10 @@ Docker image into Google Container Registry. Another Github Action deploys a sin
 Kubernetes deployment (for the sake of simplicity) of the application into GKE.
 See `.github/workflows` and `deployment/` folders for specifics respectively.
 
-Currently, you can visit [http://eventshuffle.mullikka.ml/api/v1/event](http://eventshuffle.mullikka.ml/api/v1/event) to access the API
-running at Google Kubernetes cluster.
+Currently, you can visit [http://eventshuffle.mullikka.ml/api/v1/event](http://eventshuffle.mullikka.ml/api/v1/event)
+to access the API running at Google Kubernetes cluster,
+or [http://eventshuffle.mullikka.ml/api/v1/event/swagger](http://localhost:8080/api/v1/event/swagger)
+to test it through Swagger.
 
 ## Technologies
 
