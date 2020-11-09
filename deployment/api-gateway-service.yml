@@ -1,12 +1,12 @@
 apiVersion: "v1"
 kind: "Service"
 metadata:
-  name: "event-service-service"
+  name: "api-gateway-service"
 spec:
-  type: "ClusterIP"
+  type: "LoadBalancer"
   selector:
     app: "eventshuffle-api"
   ports:
     - protocol: "TCP"
-      port: 8080
-      targetPort: 8080
+      port: 80
+      targetPort: 80
