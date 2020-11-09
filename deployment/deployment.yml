@@ -17,19 +17,7 @@ spec:
       labels:
         app: "eventshuffle-api"
     spec:
-      volumes:
-        - name: "nginx-configmap-volume"
-          configMap:
-            name: "nginx-configmap"
       containers:
-        - name: "api-gateway"
-          image: "nginx:latest"
-          ports:
-            - containerPort: 80
-          volumeMounts:
-            - mountPath: "/etc/nginx/conf.d"
-              name: "nginx-configmap-volume"
-              readOnly: true
         - name: "event-service"
           image: "gcr.io/PROJECT_ID/IMAGE:TAG"
           envFrom:
