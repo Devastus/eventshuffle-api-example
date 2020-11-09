@@ -9,7 +9,7 @@ import jsonResponse from "../util/jsonResponse";
 
 function formatEvent(eventData: any): any {
     if (!eventData) return undefined;
-    let result = {
+    const result = {
         id: eventData.id,
         name: eventData.name,
         dates: eventData.dates,
@@ -159,7 +159,7 @@ async function insertVote(ctx: Context) {
     // Update or create new Votes for each voted date
     let votesChanged = false;
     for (let i = 0; i < voteDates.length; i++) {
-        let voteDate = voteDates[i];
+        const voteDate = voteDates[i];
 
         // Check if given date exists in Event
         if (!event.dates.find((d: EventDate) => d.date === voteDate)) {
@@ -200,7 +200,7 @@ async function insertVote(ctx: Context) {
     }
 
     // Return formatted version of changed event
-    let result = formatEvent(event);
+    const result = formatEvent(event);
     jsonResponse(ctx, 200, result);
 }
 
