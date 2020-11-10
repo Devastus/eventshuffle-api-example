@@ -161,15 +161,16 @@ export default {
         let votesChanged = false;
         for (let i = 0; i < voteDates.length; i++) {
             const voteDate = voteDates[i];
+            const voteDateAsNumber = Number(voteDate);
 
             // Check if given date exists in Event
-            if (!event.dates.find((d: EventDate) => Number(d.date) === Number(voteDate))) {
+            if (!event.dates.find((d: EventDate) => Number(d.date) == voteDateAsNumber)) {
                 logger.warn(`Participant '${participant.name}' voted on an invalid date '${body.votes[i]}', discarding...`);
                 continue;
             }
 
             // Create new Vote if one doesn't exist
-            let vote = event.votes.find((v: Vote) => v.date.date === voteDate);
+            let vote = event.votes.find((v: Vote) => Number(v.date.date) === voteDateAsNumber);
             if (!vote) {
                 vote = new Vote({
                     event: new Event({id: parseInt(ctx.params.id, 10)}),

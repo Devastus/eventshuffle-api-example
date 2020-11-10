@@ -19,4 +19,10 @@ export function formatDate(time: any) {
     }
 }
 
+export function unixSecondsToDate(time: any) {
+    return new Date(Number(time) * 1000);
+}
 
+export function dateToUnixSeconds(date: Date) {
+    return date.getTime() / 1000;
+}
