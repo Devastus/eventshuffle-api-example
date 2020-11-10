@@ -25,9 +25,13 @@ export function mockContext(request: any = {}): any {
         request: {
             body: request.body || {}
         },
+        headers: {},
         body: undefined,
-        set: jest.fn(),
-        throw: (status: any) => { throw status; },
+        set: function(key: any, value: any) { this.headers[key] = value; },
+        throw: (status: any) => { throw { status, message: "Error" }; },
         status: undefined,
+        app: {
+            emit: jest.fn()
+        }
     };
 }

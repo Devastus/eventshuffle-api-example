@@ -4,9 +4,12 @@ export default async function(ctx: Context, next: any) {
     try {
         await next();
     } catch (err) {
-        const status = err.status | 500;
-        ctx.status = status;
-        ctx.body = err.message;
+        ctx.status = err ?
+            err.status || 500 :
+            500;
+        ctx.body = err ?
+            err.message || "Internal server error" :
+            "Internal server error";
         ctx.app.emit('error', err, ctx);
     }
 }

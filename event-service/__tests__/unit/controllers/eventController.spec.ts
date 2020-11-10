@@ -1,5 +1,6 @@
 import EventController from "@src/controllers/eventController";
 import { mockContext, mockTypeORM } from "../../testutils/mock";
+import { expectJsonResponse, expectErrorResponse } from "../../testutils/response";
 import { configureDateFormatType } from "@src/util/dateFormat";
 jest.mock("@src/util/logger");
 
@@ -13,12 +14,6 @@ async function runWithMock(func: any, request: any, mockData: any) {
     const ctx = mockContext(request);
     await func(ctx);
     return ctx;
-}
-
-function expectDefaultJsonResponse(ctx: any, expectedValue: any) {
-    expect(ctx.status).toEqual(200);
-    expect(typeof ctx.body).toEqual("string");
-    expect(JSON.parse(ctx.body)).toEqual(expectedValue);
 }
 
 describe("EventController", () => {
@@ -56,21 +51,20 @@ describe("EventController", () => {
             {id: 1, name: "Test event 1"},
             {id: 2, name: "Test event 2"},
         ]
-        expectDefaultJsonResponse(
+        expectJsonResponse(
             await runWithMock(EventController.listEvents, undefined, mockData),
+            200,
             expectedOutput
         );
         done();
     });
 
     it("should throw 404 if no event found in getEvent", async (done) => {
-        try {
-            await runWithMock(EventController.getEvent, {params: {id: 1}}, undefined);
-            fail("No error was thrown");
-        } catch (err) {
-            expect(err).toEqual(404);
-            done();
-        }
+        await expectErrorResponse(
+            runWithMock(EventController.getEvent, {params: {id: 1}}, undefined),
+            404
+        );
+        done();
     });
 
     it("should return an event on getEvent", async (done) => {
@@ -89,21 +83,20 @@ describe("EventController", () => {
                 {date: "2014-01-05", people: [ "John", "Jane" ]},
             ]
         };
-        expectDefaultJsonResponse(
+        expectJsonResponse(
             await runWithMock(EventController.getEvent, {params: {id: 1}}, mockData),
+            200,
             expectedOutput
         );
         done();
     });
 
     it("should throw 404 if no event found in getEventResults", async (done) => {
-        try {
-            await runWithMock(EventController.getEventResults, {params: {id: 1}}, undefined);
-            fail("No error was thrown");
-        } catch (err) {
-            expect(err).toEqual(404);
-            done();
-        }
+        await expectErrorResponse(
+            runWithMock(EventController.getEventResults, {params: {id: 1}}, undefined),
+            404
+        );
+        done();
     });
 
     it("should return event results on getEventResults", async (done) => {
@@ -118,8 +111,9 @@ describe("EventController", () => {
                 { date: "2014-01-05", people: [ "John", "Jane" ] }
             ]
         };
-        expectDefaultJsonResponse(
+        expectJsonResponse(
             await runWithMock(EventController.getEventResults, {params: {id: 1}}, mockData),
+            200,
             expectedOutput
         );
         done();
@@ -131,13 +125,11 @@ describe("EventController", () => {
                 name: "Event",
             }
         };
-        try {
-            await runWithMock(EventController.insertEvent, request, undefined);
-            fail("No error was thrown");
-        } catch (err) {
-            expect(err).toEqual(400);
-            done();
-        }
+        await expectErrorResponse(
+            runWithMock(EventController.insertEvent, request, undefined),
+            400
+        );
+        done();
     });
 
     it("should return event id on insertEvent", async (done) => {
@@ -159,8 +151,9 @@ describe("EventController", () => {
         const expectedOutput = {
             id: 1
         };
-        expectDefaultJsonResponse(
+        expectJsonResponse(
             await runWithMock(EventController.insertEvent, request, mockData),
+            200,
             expectedOutput
         );
         done();
@@ -172,13 +165,11 @@ describe("EventController", () => {
                 name: "John",
             }
         };
-        try {
-            await runWithMock(EventController.insertVote, request, undefined);
-            fail("No error was thrown");
-        } catch (err) {
-            expect(err).toEqual(400);
-            done();
-        }
+        await expectErrorResponse(
+            runWithMock(EventController.insertVote, request, undefined),
+            400
+        );
+        done();
     });
 
     it("should return event on insertVote", async (done) => {
@@ -197,23 +188,21 @@ describe("EventController", () => {
                 ]
             }
         }
+        const expectedOutput = {
+            id: 1,
+            name: "Test event",
+            dates: ["2014-01-01", "2014-01-05"],
+            votes: [
+                {date: "2014-01-01", people: [ "John" ]},
+                {date: "2014-01-05", people: [ "John", "Jane" ]},
+            ]
+        };
 
-        // Currently, due to insufficient mocking (select doesn't do anything),
-        // this needs to check fields manually as the controller calls
-        // database function several times (and another controller function),
-        // thus output contains extra fields
-        const ctx = await runWithMock(EventController.insertVote, request, mockData);
-        expect(ctx.status).toEqual(200);
-        expect(typeof ctx.body).toEqual("string");
-
-        const output = JSON.parse(ctx.body);
-        expect(output.id).toEqual(1);
-        expect(output.name).toEqual("Test event");
-        expect(output.dates).toEqual(["2014-01-01","2014-01-05"]);
-        expect(output.votes).toEqual([
-            {"date":"2014-01-01","people":["John"]},
-            {"date":"2014-01-05","people":["John","Jane"]}
-        ]);
+        expectJsonResponse(
+            await runWithMock(EventController.insertVote, request, mockData),
+            200,
+            expectedOutput
+        );
         done();
     });
 });
