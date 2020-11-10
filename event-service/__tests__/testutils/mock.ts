@@ -28,7 +28,14 @@ export function mockContext(request: any = {}): any {
         headers: {},
         body: undefined,
         set: function(key: any, value: any) { this.headers[key] = value; },
-        throw: (status: any) => { throw { status, message: "Error" }; },
+        throw: (messageOrStatus: any, status: number) => {
+            if (isNaN(messageOrStatus)) {
+                throw { message: messageOrStatus, status };
+            }
+            else {
+                throw { message: "Error", status: messageOrStatus };
+            }
+        },
         status: undefined,
         app: {
             emit: jest.fn()

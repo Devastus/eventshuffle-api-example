@@ -119,8 +119,8 @@ describe("EventController", () => {
         done();
     });
 
-    it("should throw 400 on bad request in insertEvent", async (done) => {
-        const request = {
+    it("should throw 400 on invalid request in insertEvent", async (done) => {
+        let request: any = {
             body: {
                 name: "Event",
             }
@@ -129,6 +129,13 @@ describe("EventController", () => {
             runWithMock(EventController.insertEvent, request, undefined),
             400
         );
+
+        request.dates = ["1234", "not-a-date", false];
+        await expectErrorResponse(
+            runWithMock(EventController.insertEvent, request, undefined),
+            400
+        );
+
         done();
     });
 
@@ -159,8 +166,8 @@ describe("EventController", () => {
         done();
     });
 
-    it("should throw 400 on bad request in insertVote", async (done) => {
-        const request = {
+    it("should throw 400 on invalid request in insertVote", async (done) => {
+        let request: any = {
             body: {
                 name: "John",
             }
@@ -169,6 +176,13 @@ describe("EventController", () => {
             runWithMock(EventController.insertVote, request, undefined),
             400
         );
+
+        request.votes = ["1234", "not-a-date", false];
+        await expectErrorResponse(
+            runWithMock(EventController.insertVote, request, undefined),
+            400
+        );
+
         done();
     });
 
