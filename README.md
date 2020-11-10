@@ -21,6 +21,11 @@ Visit [http://localhost:8080/api/v1/event](http://localhost:8080/api/v1/event) t
 or [http://localhost:8080/api/v1/event/swagger](http://localhost:8080/api/v1/event/swagger)
 to test it through Swagger.
 
+You can run unit tests with this command:
+```sh
+npm run test:unit
+```
+
 ### Docker
 
 First make sure you have Docker and Docker Compose installed.
@@ -54,7 +59,7 @@ See `.github/workflows` and `deployment/` folders for specifics respectively.
 
 Currently, you can visit [http://eventshuffle.mullikka.ml/api/v1/event](http://eventshuffle.mullikka.ml/api/v1/event)
 to access the API running at Google Kubernetes cluster,
-or [http://eventshuffle.mullikka.ml/api/v1/event/swagger](http://localhost:8080/api/v1/event/swagger)
+or [http://eventshuffle.mullikka.ml/api/v1/event/swagger](http://eventshuffle.mullikka.ml/api/v1/event/swagger)
 to test it through Swagger.
 
 ## Technologies

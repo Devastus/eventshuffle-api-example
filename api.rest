@@ -18,7 +18,7 @@ GET /1/results
 # Post a new event
 POST /
 {
-    "name": "Sockpuppet gladiator fighting",
+    "name": "Test Event 1",
     "dates": [
         "2014-01-01",
         "2014-01-05",
@@ -30,7 +30,7 @@ POST /
 # Post a vote of dates for an event
 POST /1/vote
 {
-    "name": "Sockus Maximus",
+    "name": "Test Person 1",
     "votes": [
         "2014-01-01"
     ]

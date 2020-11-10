@@ -46,23 +46,6 @@ services:
     networks:
       - internal
 
-  adminer:
-    image: adminer
-    ports:
-      - 8090:8080
-    networks:
-      - internal
-
-  # elasticsearch:
-  #   image: elasticsearch:7.9.3
-  #   environment:
-  #     discovery.type: "single-node"
-  #   ports:
-  #     - 9200:9200
-  #     - 9300:9300
-  #   networks:
-  #     - internal
-
 networks:
   internal:
     external: false

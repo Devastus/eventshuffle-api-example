@@ -8,8 +8,6 @@
     "build": "NODE_ENV=production tsc --project ./",
     "dev": "nodemon src/index.ts",
     "test:unit": "jest -c jest.unit.config.js",
-    "test:e2e": "jest -c jest.e2e.config.js",
-    "test:tsc": "jest -c jest.tsc.config.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "clean": "rm -rf dist/*"
