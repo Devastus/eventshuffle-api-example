@@ -7,40 +7,6 @@ import EventDate from "../entities/eventDate";
 import Participant from "../entities/participant";
 import jsonResponse from "../util/jsonResponse";
 
-function formatEvent(eventData: any): any {
-    if (!eventData) return undefined;
-    const result = {
-        id: eventData.id,
-        name: eventData.name,
-        dates: eventData.dates,
-        votes: eventData.votes
-    };
-
-    if (result.dates.length > 0) {
-        result.dates = result.dates.map((eventDate: EventDate) => eventDate.format());
-    }
-
-    if (result.votes.length > 0) {
-        result.votes = result.votes.map((vote: Vote) => {
-            return {
-                // ...vote,
-                date: vote.date.format(),
-                people: vote.people.map((p: any) => p.name)
-            };
-        });
-    }
-
-    return result;
-}
-
-function dateStringsToEventDates(dates: string[]): EventDate[] {
-    return dates.map((item: any) => {
-        return new EventDate({
-            date: Date.parse(item)
-        });
-    });
-}
-
 export default {
     /**
      * List all events
@@ -48,11 +14,11 @@ export default {
     async listEvents(ctx: Context) {
         logger.debug("listEvents", {query: ctx.query});
         const result = await getRepository(Event)
-        .createQueryBuilder("event")
-        .select(["event.id", "event.name"])
-        .offset(ctx.query.offset || 0)
-        .limit(Math.min(ctx.query.limit, 250) || 100)
-        .getMany();
+            .createQueryBuilder("event")
+            .select(["event.id", "event.name"])
+            .offset(ctx.query.offset || 0)
+            .limit(Math.min(ctx.query.limit, 250) || 100)
+            .getMany();
 
         jsonResponse(ctx, 200, result);
     },
@@ -62,18 +28,17 @@ export default {
      */
     async getEvent(ctx: Context) {
         logger.debug("getEvent", {params: ctx.params});
-        let result: any = await getRepository(Event)
-        .findOne(
-            ctx.params.id,
-            {
-                select: ["id", "name"],
-                relations: ["dates", "votes", "votes.date", "votes.people"]
-            }
-        );
+        const result: Event = await getRepository(Event)
+            .findOne(
+                ctx.params.id,
+                {
+                    select: ["id", "name"],
+                    relations: ["dates", "votes", "votes.date", "votes.people"]
+                }
+            );
         if (!result) return ctx.throw("Event not found", 404);
 
-        result = formatEvent(result);
-        jsonResponse(ctx, 200, result);
+        jsonResponse(ctx, 200, Event.filterToJsonPresentation(result));
     },
 
     /**
@@ -82,34 +47,16 @@ export default {
     async getEventResults(ctx: Context) {
         logger.debug("getEventResults", {params: ctx.params});
         const result: any = await getRepository(Event)
-        .findOne(
-            ctx.params.id,
-            {
-                select: ["name"],
-                relations: ["votes", "votes.people", "votes.date", "participants"]
-            }
-        );
+            .findOne(
+                ctx.params.id,
+                {
+                    select: ["name"],
+                    relations: ["votes", "votes.people", "votes.date", "participants"]
+                }
+            );
         if (!result) return ctx.throw("Event not found", 404);
 
-        // Filter and format suitable dates for _all_ participants
-        if (result.votes.length < 1){
-            result.suitableDates = [];
-        } else {
-            result.suitableDates = result.votes
-            .filter((item: Vote) => item.people.length === result.participants.length)
-            .map((item: Vote) => {
-                return {
-                    date: item.date.format(),
-                    people: item.people.map((p: any) => p.name)
-                };
-            });
-        }
-
-        // Clean up the result
-        delete result.votes;
-        delete result.participants;
-
-        jsonResponse(ctx, 200, result);
+        jsonResponse(ctx, 200, Event.filterToResultsPresentation(result));
     },
 
     /**
@@ -125,7 +72,7 @@ export default {
 
         let dates: EventDate[];
         try {
-            dates = dateStringsToEventDates(ctx.request.body.dates);
+            dates = EventDate.fromDateStringArray(ctx.request.body.dates);
         } catch(e) {
             return ctx.throw("Invalid date format", 400);
         }
@@ -139,7 +86,7 @@ export default {
         delete newEvent.id;
 
         const result = await getRepository(Event)
-        .save(newEvent);
+            .save(newEvent);
         logger.debug("New Event created", newEvent);
         jsonResponse(ctx, 200, { id: result.id });
     },
@@ -149,24 +96,27 @@ export default {
      */
     async insertVote(ctx: Context) {
         logger.debug("insertVote", {params: ctx.params, body: ctx.request.body});
-        const event: any = await getRepository(Event)
-        .findOne(
-            ctx.params.id,
-            { relations: ["participants", "dates", "votes", "votes.date", "votes.people"] }
-        );
-        if (!event) return ctx.throw("Event not found", 400);
 
         const body: any = ctx.request.body;
         if (!body.name || !body.votes || body.votes.length < 1) {
             return ctx.throw("Invalid request", 400);
         }
 
+        // Parse dates
         let voteDates: EventDate[];
         try {
-            voteDates = dateStringsToEventDates(body.votes);
+            voteDates = EventDate.fromDateStringArray(body.votes);
         } catch (e) {
             return ctx.throw("Invalid date format", 400);
         }
+
+        // Get event
+        const event: Event = await getRepository(Event)
+        .findOne(
+            ctx.params.id,
+            { relations: ["participants", "dates", "votes", "votes.date", "votes.people"] }
+        );
+        if (!event) return ctx.throw("Event not found", 400);
 
         // Get a Participant by name, or create one if it doesn't exist
         let participant = event.participants.find((p: Participant) => p.name === body.name);
@@ -184,13 +134,13 @@ export default {
             const voteDate = voteDates[i];
 
             // Check if given date exists in Event
-            if (!event.dates.find((d: EventDate) => d === voteDate)) {
+            if (!event.dates.find((d: EventDate) => d.numberEquals(voteDate))) {
                 logger.warn(`Participant '${participant.name}' voted on an invalid date '${body.votes[i]}', discarding...`);
                 continue;
             }
 
             // Create new Vote if one doesn't exist
-            let vote = event.votes.find((v: Vote) => v.date === voteDate);
+            let vote = event.votes.find((v: Vote) => v.date.numberEquals(voteDate));
             if (!vote) {
                 vote = new Vote({
                     event: new Event({id: parseInt(ctx.params.id, 10)}),
@@ -207,7 +157,7 @@ export default {
             else {
                 if (!vote.people.find((p: Participant) => p.name === participant.name)) {
                     vote.people.push(participant);
-                    vote.modifiedAt = Date.now();
+                    vote.modifiedAt = Date.now() as any;
                     votesChanged = true;
                     logger.debug(`Existing Vote '${vote.id}' modified for event '${event.id}'`, vote);
                 }
@@ -215,14 +165,14 @@ export default {
         }
 
         if (votesChanged) {
-            event.modifiedAt = Date.now();
+            event.modifiedAt = Date.now() as any;
             await getRepository(Event)
-            .save(event);
+                .save(event);
             logger.debug(`Event '${event.id}' changes saved`);
         }
 
         // Return formatted version of changed event
-        const result = formatEvent(event);
+        const result = Event.filterToJsonPresentation(event);
         jsonResponse(ctx, 200, result);
     }
 }

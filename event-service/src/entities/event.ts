@@ -35,7 +35,53 @@ export default class Event {
         this.name = data.name;
         this.dates = data.dates;
         this.votes = data.votes;
+        this.participants = data.participants;
         this.createdAt = data.createdAt;
         this.modifiedAt = data.modifiedAt;
+    }
+
+    static filterToJsonPresentation(event: Event): any {
+        const result = {
+            id: event.id,
+            name: event.name,
+            dates: [],
+            votes: []
+        };
+
+        if (event.dates.length > 0) {
+            result.dates = event.dates.map((eventDate: EventDate) => eventDate.format());
+        }
+
+        if (event.votes.length > 0) {
+            result.votes = event.votes.map((vote: Vote) => {
+                return {
+                    date: vote.date.format(),
+                    people: vote.people.map((p: any) => p.name)
+                };
+            });
+        }
+        return result;
+    }
+
+    static filterToResultsPresentation(event: Event): any {
+        const result = {
+            name: event.name,
+            suitableDates: []
+        };
+
+        // Filter and format suitable dates for _all_ participants
+        if (event.votes.length < 1){
+            result.suitableDates = [];
+        } else {
+            result.suitableDates = event.votes
+                .filter((item: Vote) => item.people.length === event.participants.length)
+                .map((item: Vote) => {
+                    return {
+                        date: item.date.format(),
+                        people: item.people.map((p: any) => p.name)
+                    };
+                });
+        }
+        return result;
     }
 }

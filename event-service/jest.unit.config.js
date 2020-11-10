@@ -6,6 +6,11 @@ module.exports = {
     preset: 'ts-jest',
     testEnvironment: 'node',
     rootDir: ".",
+    // globals: {
+    //     'ts-jest': {
+    //         diagnostics: false
+    //     }
+    // },
     setupFilesAfterEnv: ["./__tests__/jest-setup.ts"],
     verbose: true,
     moduleFileExtensions: ["js", "ts", "tsx"],

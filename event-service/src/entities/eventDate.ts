@@ -14,4 +14,16 @@ export default class EventDate {
     format() {
         return formatDate(Number(this.date));
     }
+
+    numberEquals(eventDate: EventDate): boolean {
+        return Number(eventDate.date) === Number(this.date);
+    }
+
+    static fromDateString(date: string): EventDate {
+        return new EventDate({ date: Date.parse(date) });
+    }
+
+    static fromDateStringArray(dates: string[]): EventDate[] {
+        return dates.map((date: string) => EventDate.fromDateString(date));
+    }
 }
