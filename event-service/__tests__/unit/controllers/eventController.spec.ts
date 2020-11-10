@@ -120,7 +120,7 @@ describe("EventController", () => {
     });
 
     it("should throw 400 on invalid request in insertEvent", async (done) => {
-        let request: any = {
+        const request: any = {
             body: {
                 name: "Event",
             }
@@ -167,7 +167,7 @@ describe("EventController", () => {
     });
 
     it("should throw 400 on invalid request in insertVote", async (done) => {
-        let request: any = {
+        const request: any = {
             body: {
                 name: "John",
             }
