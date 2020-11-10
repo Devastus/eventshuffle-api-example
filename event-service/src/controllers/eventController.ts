@@ -163,7 +163,7 @@ export default {
             const voteDate = voteDates[i];
 
             // Check if given date exists in Event
-            if (!event.dates.find((d: EventDate) => d.date === voteDate)) {
+            if (!event.dates.find((d: EventDate) => Number(d.date) === Number(voteDate))) {
                 logger.warn(`Participant '${participant.name}' voted on an invalid date '${body.votes[i]}', discarding...`);
                 continue;
             }
