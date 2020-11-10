@@ -7,3 +7,4 @@ resources:
 - event-service-configmap.yml
 - mariadb-service.yml
 - mariadb-configmap.yml
+- mariadb-pvc.yml
