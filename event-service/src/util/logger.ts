@@ -14,21 +14,16 @@ function consoleFormat(configuration: Configuration) {
 
 export function configureLogger(configuration: Configuration) {
     const transports = [];
-    if (configuration.logConsole) {
-        transports.push(
-            new winston.transports.Console({
-                format: winston.format.combine(
-                    winston.format.timestamp(),
-                    winston.format.metadata({fillExcept: ["timestamp", "level", "service", "message"]}),
-                    winston.format.colorize(),
-                    consoleFormat(configuration)
-                )
-            })
-        );
-    }
-    // if (configuration.logElasticSearch) {
-
-    // }
+    transports.push(
+        new winston.transports.Console({
+            format: winston.format.combine(
+                winston.format.timestamp(),
+                winston.format.metadata({fillExcept: ["timestamp", "level", "service", "message"]}),
+                winston.format.colorize(),
+                consoleFormat(configuration)
+            )
+        })
+    );
 
     logger = winston.createLogger({
         level: configuration.logLevel,

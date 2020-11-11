@@ -16,8 +16,6 @@ export interface Configuration {
     port: number,
     dateFormatType: DateFormatType,
     routePrefix: string,
-    logConsole: boolean,
-    logElasticSearch: boolean,
     logLevel: string
 }
 
@@ -89,9 +87,9 @@ export default async function(app: Koa): Promise<Configuration> {
         appName: process.env.APP_NAME || "event-service",
         port: parseInt(process.env.PORT) || 8080,
         dateFormatType: (process.env.DATE_FORMAT || "isodate") as any,
-        routePrefix: process.env.ROUTE_PREFIX || "/api/v1/event",
-        logConsole: (process.env.LOG_CONSOLE === "true") || true,
-        logElasticSearch: (process.env.LOG_ELASTIC_SEARCH === "true") || false ,
+        routePrefix: process.env.ROUTE_PREFIX !== undefined ?
+            process.env.ROUTE_PREFIX :
+            "/api/v1/event",
         logLevel: process.env.LOG_LEVEL || "debug",
     };
 
