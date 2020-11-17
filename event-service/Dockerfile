@@ -8,7 +8,7 @@ COPY ./*.yml build/
 WORKDIR build/
 RUN npm ci && npm run build
 
-# # Run stage
+# Run stage
 FROM node:12-alpine
 COPY --from=build build/package.json app/package.json
 COPY --from=build build/package-lock.json app/package-lock.json
